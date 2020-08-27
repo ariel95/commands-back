@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Commands.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Commands.Data
 {
@@ -20,6 +21,7 @@ namespace Commands.Data
             return _repository.SaveChanges() >= 0;
         }
 
+        #region Command
         public void CreateCommand(Command command)
         {
             if(command == null){
@@ -40,19 +42,46 @@ namespace Commands.Data
 
         public IEnumerable<Command> GetAllCommands()
         {
-            return _repository.Commands.ToList();
+            return _repository.Commands.Include(x=>x.Platform).ToList();
         }
 
         public Command GetCommandById(int id)
         {
-            return _repository.Commands.FirstOrDefault(x => x.Id == id);
+            return _repository.Commands.Include(x=>x.Platform).FirstOrDefault(x => x.Id == id);
         }
-
-
 
         public void UpdateCommand(Command command)
         {
             _repository.Commands.Update(command);
         }
+
+        #endregion
+
+        #region Platform
+        public IEnumerable<Platform> GetAllPlatforms()
+        {
+            return _repository.Platforms.ToList();
+        }
+
+        public Platform GetPlatformById(int id)
+        {
+            return _repository.Platforms.FirstOrDefault(x=>x.Id == id);
+        }
+
+        public void CreatePlatform(Platform platform)
+        {
+            _repository.Platforms.Add(platform);
+        }
+
+        public void DeletePlatform(Platform platform)
+        {
+            _repository.Platforms.Remove(platform);
+        }
+
+        public void UpdatePlatform(Platform platform)
+        {
+             _repository.Platforms.Update(platform);
+        }
+        #endregion
     }
 }

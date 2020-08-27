@@ -12,6 +12,7 @@ namespace Commands.Data
 
         //DB SETS
         public DbSet<Command> Commands { get; set; }
+        public DbSet<Platform> Platforms { get; set; }
 
     }
 }

@@ -63,8 +63,15 @@ namespace Commands.Controllers
         {
             try
             {
+                //Get platform
+                var platform = _repository.GetPlatformById(commandCreate.PlatformId);
+                if(platform == null){
+                    return NotFound();
+                }
+
                 //Maper
                 var commandModel = _mapper.Map<Command>(commandCreate);
+                commandModel.Platform = platform;
 
                 //Create
                 _repository.CreateCommand(commandModel);
